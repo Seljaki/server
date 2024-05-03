@@ -1,5 +1,6 @@
 import { generateJwt } from "../utils/jwtGenerator.js"
 import { createUser } from "../utils/user.js"
+import sql from "../db.js"
 
 export async function addUser(req, res) {
   try {
@@ -11,6 +12,16 @@ export async function addUser(req, res) {
 
     const token = generateJwt(newUser.id, username)
     res.status(201).json({ token })
+  } catch (err) {
+    console.error(err.message)
+    res.status(500).json({ message: err.message})
+  }
+}
+
+export async function listAll(req, res) {
+  try {
+    const users = await sql`SELECT id, username, email FROM users`;
+    res.status(201).json({ users })
   } catch (err) {
     console.error(err.message)
     res.status(500).json({ message: err.message})
