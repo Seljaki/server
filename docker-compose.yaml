@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  postgres_server:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: seljaki
+      POSTGRES_PASSWORD: alex18cm 
+      POSTGRES_DB: seljaki
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./sql-scripts:/docker-entrypoint-initdb.d
+      - db:/var/lib/postgres
+  server:
+    container_name: seljaki-server
+    build: .
+    environment:
+      - PORT=3000
+      - PG_HOST=postgres_server
+      - PG_PORT=5432
+      - PG_DB=seljaki
+      - PG_USERNAME=seljaki
+      - PG_PASSWORD=alex18cm
+      - JWT_SECRET=Shrek
+    ports:
+      - 3333:3000
+    depends_on:
+      - postgres_server
+    restart: unless-stopped
+
+volumes: 
+  db:
