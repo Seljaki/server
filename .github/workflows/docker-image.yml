@@ -21,7 +21,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: mrdog210
-          password: dckr_pat_IwYro1ytUf1KadoE9FUrbhjq2gQ
+          password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -49,6 +49,6 @@ jobs:
           method: "POST"
           accept: 200,201,204
           timeout: 60000
-          bearer-token: shrocks
+          bearer-token: ${{ secrets.WATCHTOWER_TOKEN }}
           log-response: true
           retries: 1
