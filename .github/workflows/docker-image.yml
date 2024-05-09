@@ -3,8 +3,6 @@ name: Publish docker image
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   push_to_registry:
@@ -40,3 +38,17 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      - name: Waiting for docker upload
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '20s'
+      - name: Webhook
+        uses: indiesdev/curl@v1.1
+        with:
+          url: https://seljaki-watch.schnapsen66.eu/v1/update
+          method: "POST"
+          accept: 200,201,204
+          timeout: 60000
+          bearer-token: shrocks
+          log-response: true
+          retries: 1

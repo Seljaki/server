@@ -23,9 +23,9 @@ app.use('/users', userRoutes)
 
 app.listen(port, async () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
-  try {
+  /*try {
     await createUser('admin', 'admin', null)
   } catch (error) {
 
-  }
+  }*/
 });
