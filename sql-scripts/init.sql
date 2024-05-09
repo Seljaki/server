@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY NOT NULL,
-  username VARCHAR(50) NOT NULL,
+  username VARCHAR(50) NOT NULL UNIQUE,
   password VARCHAR(200) NOT NULL,
   email VARCHAR(50)
 );
@@ -79,3 +79,9 @@ CREATE TABLE IF NOT EXISTS activities (
   isPaid BOOLEAN NOT NULL DEFAULT false,
   dueDate DATE NOT NULL
 );
+
+
+
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+INSERT INTO users(username, password) VALUES ('admin', crypt('admin', gen_salt('bf')));
