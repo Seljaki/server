@@ -1,7 +1,7 @@
 import sql from "../db.js";
 
 export async function removeDefaultIssuer() {
-  return sql`UPDATE companies SET defaultIssuer = false`
+  return sql`UPDATE companies SET "defaultIssuer" = false`
 }
 
 export async function getCompanyById(companyId) {

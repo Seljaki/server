@@ -46,13 +46,13 @@ export async function updateCompany(req, res) {
     const companyId = req.params.companyId
     const c = await getCompanyById(companyId)
 
-    const { name = c.name, address = c.address, isTaxpayer = c.istaxpayer, phone = c.phone, taxNumber = c.taxnumber, iban = c.iban, email = c.email, isDefaultIssuer = c.defaultissuer, accessToken = c.accesstoken} = req.body
+    const { name = c.name, address = c.address, isTaxpayer = c.isTaxpayer, phone = c.phone, taxNumber = c.taxNumber, iban = c.iban, email = c.email, isDefaultIssuer = c.defaultIssuer, accessToken = c.accessToken} = req.body
 
     if(isDefaultIssuer)
       await removeDefaultIssuer()
 
     const companies = await sql`UPDATE companies SET 
-    name = ${name}, address = ${address}, accesstoken = ${accessToken}, istaxpayer = ${isTaxpayer}, phone = ${phone}, taxnumber = ${taxNumber}, iban = ${iban}, email = ${email}, defaultissuer = ${isDefaultIssuer} 
+    name = ${name}, address = ${address}, "accessToken" = ${accessToken}, "isTaxpayer" = ${isTaxpayer}, phone = ${phone}, "taxNumber" = ${taxNumber}, iban = ${iban}, email = ${email}, "defaultIssuer" = ${isDefaultIssuer} 
     WHERE id = ${companyId}
     returning *`
 
