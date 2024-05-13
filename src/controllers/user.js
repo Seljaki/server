@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes"
 
 export async function addUser(req, res) {
   try {
-    const { username, email, password } = req.body
+    const { username, email = null, password } = req.body
     if(username.length === 0 | password.length < 3)
       throw new Error("Invalid name/password lenght")
 
