@@ -8,10 +8,10 @@ router.get('/', requiresLogin, listAllUsers)
 
 router.post('/', requiresLogin, addUser)
 
-//router.put('/:userId', requiresLogin, updateUser)
+router.put('/:userId', requiresLogin, updateUser)
 router.put('/', requiresLogin, updateUser)
 
-//router.delete('/:userId', requiresLogin, deleteUser)
+router.delete('/:userId', requiresLogin, deleteUser)
 router.delete('/', requiresLogin, deleteUser)
 
 export default router
