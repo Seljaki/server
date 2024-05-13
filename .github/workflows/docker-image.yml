@@ -41,7 +41,7 @@ jobs:
       - name: Waiting for docker upload
         uses: jakejarvis/wait-action@master
         with:
-          time: '20s'
+          time: '30s'
       - name: Webhook
         uses: indiesdev/curl@v1.1
         with:
