@@ -4,8 +4,20 @@ import { getCompanyById, removeDefaultIssuer } from "../models/companyModel.js";
 
 export async function listAllCompanies(req, res) {
   try {
-    const companies = await sql`SELECT * FROM companies`;
+    const { name } = req.query
+    const companies = await sql`SELECT * FROM companies ${ name ? sql`WHERE name ILIKE ${'%'+name+'%'}` : sql``}`;
     res.status(StatusCodes.OK).json({ companies })
+  } catch (err) {
+    console.error(err.message)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
+  }
+}
+
+export async function companyById(req, res) {
+  try {
+    const companyId = req.params.companyId
+    const company = await getCompanyById(companyId)
+    res.status(StatusCodes.OK).json({ company })
   } catch (err) {
     console.error(err.message)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})

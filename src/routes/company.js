@@ -1,8 +1,9 @@
 import express from 'express';
-import { addCompany, deleteCompany, listAllCompanies, updateCompany } from '../controllers/company.js';
+import { addCompany, companyById, deleteCompany, listAllCompanies, updateCompany } from '../controllers/company.js';
 
 const router = express.Router()
 
+router.get('/:companyId', companyById)
 router.get('/', listAllCompanies)
 
 router.post('/', addCompany)
