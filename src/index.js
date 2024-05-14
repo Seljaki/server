@@ -5,8 +5,9 @@ import cors from 'cors';
 import authRoutes from './routes/auth.js'
 import userRoutes from './routes/users.js'
 import plotsRoutes from './routes/plot.js'
+import companiesRoutes from './routes/company.js'
 import morgan from "morgan";
-import { createUser } from "./utils/user.js";
+import { requiresLogin } from "./middleware/authChecker.js";
 
 dotenv.config();
 
@@ -20,8 +21,10 @@ app.use(morgan('dev'))
 
 // Routes
 app.use('/auth', authRoutes)
+app.use(requiresLogin)
 app.use('/users', userRoutes)
 app.use('/plots', plotsRoutes)
+app.use('/companies', companiesRoutes)
 
 app.listen(port, async () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
