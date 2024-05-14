@@ -15,8 +15,8 @@ export async function getAllJobTypes(req, res) {
 export async function getAllQuantityTypes(req, res) {
   try {
     const { name } = req.query 
-    const quantityTypes = await sql`SELECT unnest(enum_range(NULL::QUANTITY_TYPE))`;
-    res.status(StatusCodes.OK).json({ quantityTypes })
+    const quantityTypes = await sql`SELECT enum_range(NULL::QUANTITY_TYPE)`;
+    res.status(StatusCodes.OK).json({ quantityTypes: quantityTypes[0].enum_range })
   } catch (err) {
     console.error(err.message)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
@@ -50,12 +50,11 @@ export async function updateJobType(req, res) {
 
     const { name = jt.name, quantityType = jt.quantityType, price = jt.price} = req.body
 
-    const jobTypes = await sql`INSERT INTO jobType VALUES (
-      DEFAULT,
-      ${name},
-      ${quantityType},
-      ${price}
-    ) returning *`
+    const jobTypes = await sql`UPDATE jobType SET
+      name = ${name},
+      "quantityType" = ${quantityType},
+      price = ${price}
+      WHERE id = ${jobTypeId} returning *`
 
     res.status(StatusCodes.OK).json({ jobType: jobTypes[0] })
   } catch (err) {
