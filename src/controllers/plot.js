@@ -78,18 +78,6 @@ export async function updatePlot(req, res) {
       boundary = await getGeomFromJson(boundary)
     }
 
-    console.log(`UPDATE companies SET 
-    title = ${title}, 
-    note = ${note}, 
-    boundary = ${boundary}, 
-    bbox = (SELECT ST_Extent(${boundary})::box2d),
-    "plotSize" = (SELECT ST_Area(${boundary})),
-    "plotNumber" = ${plotNumber},
-    "cadastralMunicipality" = ${cadastralMunicipality},
-    archived = ${archived}
-    WHERE id = ${plotId};
-    returning *`)
-
     const plots = await sql`UPDATE plots SET 
     title = ${title}, 
     note = ${note}, 

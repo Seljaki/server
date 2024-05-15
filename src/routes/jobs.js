@@ -13,6 +13,6 @@ router.delete('/:jobId', deleteJob)
 
 router.put('/:jobId', updateJob)
 
-router.use('/:jobId/jobCost', jobCostRoutes)
+router.use('/:jobId/jobCosts', jobCostRoutes)
 
 export default router
