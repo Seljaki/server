@@ -12,11 +12,15 @@ export async function getAllJobTypes(req, res) {
   }
 }
 
+export async function getJobTypeByIdJson(jobTypeId) {
+  const jobTypes = await sql`SELECT * FROM jobType WHERE id = ${jobTypeId}`;
+  return jobTypes[0]
+}
+
 export async function getJobTypeById(req, res) {
   try {
     const jobTypeId = req.params.jobTypeId
-    const jobTypes = await sql`SELECT * FROM jobType WHERE id = ${jobTypeId}`;
-    res.status(StatusCodes.OK).json({ jobType: jobTypes[0] })
+    res.status(StatusCodes.OK).json({ jobType: await getJobTypeByIdJson(jobTypeId) })
   } catch (err) {
     console.error(err.message)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
@@ -25,7 +29,6 @@ export async function getJobTypeById(req, res) {
 
 export async function getAllQuantityTypes(req, res) {
   try {
-    const { name } = req.query 
     const quantityTypes = await sql`SELECT enum_range(NULL::QUANTITY_TYPE)`;
     res.status(StatusCodes.OK).json({ quantityTypes: quantityTypes[0].enum_range })
   } catch (err) {
