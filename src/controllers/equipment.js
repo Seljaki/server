@@ -42,7 +42,6 @@ export async function updateEquipment(req, res) {
     try {
         const equipmentId = req.params.equipmentId
         const c = await getEquipmentById(equipmentId)
-        console.log(c.nextService)
         const { name = c.name, nextService = c.nextService, nextServiceHours= c.nextServiceHours, hours = c.hours, equipmentType = c.equipmentType } = req.body
 
         const equipment = await sql`UPDATE equipment SET 
