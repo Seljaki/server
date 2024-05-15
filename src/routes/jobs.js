@@ -1,6 +1,7 @@
 import express from 'express';
 import jobCostRoutes from './jobCost.js'
 import jobPlotsRoutes from './jobsPlots.js'
+import jobEquipment from "../controllers/jobsEquipment.js";
 import { addJobToInvoice, deleteJob, getAllJobsForInvoice, getjobById, updateJob } from '../controllers/jobs.js';
 
 const router = express.Router({mergeParams: true})
@@ -16,5 +17,5 @@ router.put('/:jobId', updateJob)
 
 router.use('/:jobId/jobCosts', jobCostRoutes)
 router.use('/:jobId/plots', jobPlotsRoutes)
-
+router.use('/:jobId/equipment', jobEquipment)
 export default router

@@ -38,7 +38,7 @@ export async function deleteJobPlot(req, res) {
     const jobPlots = await sql`DELETE FROM job_has_plot WHERE
     job_id = ${jobId} AND plot_id = ${plotId}`;
 
-    res.status(StatusCodes.OK).json({ message: 'Relationm deleted' })
+    res.status(StatusCodes.OK).json({ message: 'Relation deleted' })
   } catch (err) {
     console.error(err.message)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
