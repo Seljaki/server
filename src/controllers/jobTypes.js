@@ -4,8 +4,19 @@ import { StatusCodes } from "http-status-codes";
 export async function getAllJobTypes(req, res) {
   try {
     const { name } = req.query 
-    const plotTypes = await sql`SELECT * FROM jobType ${ name ? sql`WHERE name ILIKE ${'%'+name+'%'}` : sql``}`;
-    res.status(StatusCodes.OK).json({ plotTypes })
+    const jobTypes = await sql`SELECT * FROM jobType ${ name ? sql`WHERE name ILIKE ${'%'+name+'%'}` : sql``}`;
+    res.status(StatusCodes.OK).json({ jobTypes })
+  } catch (err) {
+    console.error(err.message)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
+  }
+}
+
+export async function getJobTypeById(req, res) {
+  try {
+    const jobTypeId = req.params.jobTypeId
+    const jobTypes = await sql`SELECT * FROM jobType WHERE id = ${jobTypeId}`;
+    res.status(StatusCodes.OK).json({ jobType: jobTypes[0] })
   } catch (err) {
     console.error(err.message)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
@@ -59,6 +70,19 @@ export async function updateJobType(req, res) {
     res.status(StatusCodes.OK).json({ jobType: jobTypes[0] })
   } catch (err) {
     //console.log(err)
+    console.error(err.message)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
+  }
+}
+
+export async function deleteJobType(req, res) {
+  try {
+    const jobTypeId = req.params.jobTypeId
+  
+    await sql`DELETE FROM jobType WHERE id = ${jobTypeId}`
+
+    res.status(StatusCodes.OK).json({ message: "Job type deleted" })
+  } catch (err) {
     console.error(err.message)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
   }
