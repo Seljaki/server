@@ -14,6 +14,23 @@ export async function getAllPlots(req, res) {
   }
 }
 
+export async function getAllPlotsAsGeoJson(req, res) {
+  try {
+    const { xmin, ymin, xmax, ymax, inputSrid = 3794, outputSrid = 3794 } = req.body 
+
+    console.log(`SELECT st_asgeojson(ST_Transform(boundary, ${outputSrid})) FROM plots WHERE 
+    st_contains(st_transform(st_makeenvelope(${xmin},${ymin},${xmax},${ymax}, ${inputSrid}), 3794), boundary);`)
+
+    // TODO: FIX transform, doesnt accept template literals
+    const plots = await sql`SELECT st_asgeojson(ST_Transform(boundary, 4326)) FROM plots WHERE 
+    st_contains(st_transform(st_makeenvelope(${xmin},${ymin},${xmax},${ymax}, ${inputSrid}), 3794), boundary);`;
+    res.status(StatusCodes.OK).json({ plots })
+  } catch (err) {
+    console.error(err.message)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
+  }
+}
+
 export async function getPlotById(req, res) {
   try {
     const plotId = req.params.plotId

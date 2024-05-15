@@ -1,8 +1,9 @@
 import express from 'express';
-import { addPlot, deletePlot, getAllPlots, getPlotById, updatePlot } from '../controllers/plot.js';
+import { addPlot, deletePlot, getAllPlots, getAllPlotsAsGeoJson, getPlotById, updatePlot } from '../controllers/plot.js';
 
 const router = express.Router()
 
+router.get('/geojson', getAllPlotsAsGeoJson)
 router.get('/:plotId', getPlotById)
 router.get('/', getAllPlots)
 
