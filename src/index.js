@@ -6,6 +6,7 @@ import authRoutes from './routes/auth.js'
 import userRoutes from './routes/users.js'
 import plotsRoutes from './routes/plot.js'
 import companiesRoutes from './routes/company.js'
+import jobTypeRoutes from './routes/jobType.js'
 import morgan from "morgan";
 import { requiresLogin } from "./middleware/authChecker.js";
 
@@ -25,6 +26,7 @@ app.use(requiresLogin)
 app.use('/users', userRoutes)
 app.use('/plots', plotsRoutes)
 app.use('/companies', companiesRoutes)
+app.use('/jobTypes', jobTypeRoutes)
 
 app.listen(port, async () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
