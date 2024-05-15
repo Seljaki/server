@@ -5,6 +5,8 @@ import cors from 'cors';
 import authRoutes from './routes/auth.js'
 import userRoutes from './routes/users.js'
 import companiesRoutes from './routes/company.js'
+import servicesRoutes from './routes/service.js'
+import equipmentRoutes from './routes/equipment.js'
 import morgan from "morgan";
 import { requiresLogin } from "./middleware/authChecker.js";
 
@@ -23,6 +25,8 @@ app.use('/auth', authRoutes)
 app.use(requiresLogin)
 app.use('/users', userRoutes)
 app.use('/companies', companiesRoutes)
+app.use('/equipment', equipmentRoutes)
+app.use('/services', servicesRoutes)
 
 app.listen(port, async () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
