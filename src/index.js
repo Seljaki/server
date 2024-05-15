@@ -6,8 +6,13 @@ import authRoutes from './routes/auth.js'
 import userRoutes from './routes/users.js'
 import plotsRoutes from './routes/plot.js'
 import companiesRoutes from './routes/company.js'
+<<<<<<< SCRUM-19-equipment-interface
+import servicesRoutes from './routes/service.js'
+import equipmentRoutes from './routes/equipment.js'
+=======
 import jobTypeRoutes from './routes/jobType.js'
 import invoicesRoutes from './routes/invoice.js'
+>>>>>>> dev
 import morgan from "morgan";
 import { requiresLogin } from "./middleware/authChecker.js";
 
@@ -27,8 +32,13 @@ app.use(requiresLogin)
 app.use('/users', userRoutes)
 app.use('/plots', plotsRoutes)
 app.use('/companies', companiesRoutes)
+<<<<<<< SCRUM-19-equipment-interface
+app.use('/equipment', equipmentRoutes)
+app.use('/services', servicesRoutes)
+=======
 app.use('/jobTypes', jobTypeRoutes)
 app.use('/invoices', invoicesRoutes)
+>>>>>>> dev
 
 app.listen(port, async () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
