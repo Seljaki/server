@@ -98,7 +98,3 @@ CREATE TABLE IF NOT EXISTS cost (
   amount NUMERIC NOT NULL,
   job_id INT NOT NULL REFERENCES job(id) ON DELETE CASCADE
 );
-
-
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-INSERT INTO users(username, password) VALUES ('admin', crypt('admin', gen_salt('bf')));

@@ -28,6 +28,7 @@ app.use(morgan('dev'))
 
 // Routes
 app.use('/auth', authRoutes)
+// All next routes require auth
 app.use(requiresLogin)
 app.use('/users', userRoutes)
 app.use('/plots', plotsRoutes)
@@ -41,5 +42,5 @@ app.use('/jobCosts', jobsCostRoutes)
 
 app.listen(port, async () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
-  migrateDatabse()
+  setTimeout(migrateDatabse, 60000) // we ensure that the db image is live
 });

@@ -2,6 +2,7 @@ import { fileURLToPath } from 'url'
 import cp from 'child_process'
 import shift from 'postgres-shift'
 import sql from "../db.js";
+import { createUser } from '../utils/user.js';
 
 async function migrateDatabse() {
   console.log("Migration")
@@ -19,7 +20,12 @@ async function migrateDatabse() {
 
       }
     })
-    .then(() => console.log('Migration finished'))
+    .then(async () => {
+      console.log('Migration finished')
+      const users = await sql`SELECT * FROM users`
+      if(users.length === 0)
+        createUser('admin', 'admin', null).catch(e => console.log(e))
+    })
     .catch(err => {
       console.error('Failed', err.message)
       //process.exit(1)
