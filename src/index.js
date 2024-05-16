@@ -14,6 +14,7 @@ import jobsRoutes from './routes/jobs.js'
 import jobsCostRoutes from './routes/jobCost.js'
 import morgan from "morgan";
 import { requiresLogin } from "./middleware/authChecker.js";
+import migrateDatabse from "./db/migration.js";
 
 dotenv.config();
 
@@ -40,9 +41,5 @@ app.use('/jobCosts', jobsCostRoutes)
 
 app.listen(port, async () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
-  /*try {
-    await createUser('admin', 'admin', null)
-  } catch (error) {
-
-  }*/
+  migrateDatabse()
 });
