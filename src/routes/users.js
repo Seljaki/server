@@ -1,17 +1,16 @@
 import express from 'express';
-import { requiresLogin } from '../middleware/authChecker.js';
 import { addUser, deleteUser, listAllUsers, updateUser } from '../controllers/user.js';
 
 const router = express.Router()
 
-router.get('/', requiresLogin, listAllUsers)
+router.get('/', listAllUsers)
 
-router.post('/', requiresLogin, addUser)
+router.post('/', addUser)
 
-//router.put('/:userId', requiresLogin, updateUser)
-router.put('/', requiresLogin, updateUser)
+router.put('/:userId', updateUser)
+router.put('/', updateUser)
 
-//router.delete('/:userId', requiresLogin, deleteUser)
-router.delete('/', requiresLogin, deleteUser)
+router.delete('/:userId', deleteUser)
+router.delete('/', deleteUser)
 
 export default router

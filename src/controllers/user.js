@@ -1,30 +1,31 @@
 import { generateJwt } from "../utils/jwtGenerator.js"
 import { createUser, hashPassword } from "../utils/user.js"
 import sql from "../db.js"
+import { StatusCodes } from "http-status-codes"
 
 export async function addUser(req, res) {
   try {
-    const { username, email, password } = req.body
+    const { username, email = null, password } = req.body
     if(username.length === 0 | password.length < 3)
       throw new Error("Invalid name/password lenght")
 
     const newUser = await createUser(username, password, email)
 
     const token = generateJwt(newUser.id, username)
-    res.status(201).json({ token })
+    res.status(StatusCodes.OK).json({ token })
   } catch (err) {
     console.error(err.message)
-    res.status(500).json({ message: err.message})
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
   }
 }
 
 export async function listAllUsers(req, res) {
   try {
     const users = await sql`SELECT id, username, email FROM users`;
-    res.status(201).json({ users })
+    res.status(StatusCodes.OK).json({ users })
   } catch (err) {
     console.error(err.message)
-    res.status(500).json({ message: err.message})
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
   }
 }
 
@@ -47,10 +48,10 @@ export async function updateUser(req, res) {
 
     await sql`UPDATE users SET username = ${user.username}, password = ${user.password}, email = ${user.email} WHERE id = ${req.user.id}`
 
-    res.status(201).json({ user })
+    res.status(StatusCodes.OK).json({ user })
   } catch (err) {
     console.error(err.message)
-    res.status(500).json({ message: err.message})
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
   }
 }
 
@@ -58,9 +59,9 @@ export async function deleteUser(req, res) {
   try {
     const userId = req.params.userId ? req.params.userId : req.user.id
     await sql`DELETE FROM users WHERE id = ${userId}`;
-    res.status(201).json({ user })
+    res.status(StatusCodes.OK).json({ message: 'User deleted' })
   } catch (err) {
     console.error(err.message)
-    res.status(500).json({ message: err.message})
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
   }
 }
