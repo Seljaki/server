@@ -16,8 +16,9 @@ export async function login(req, res) {
     if(!isValid)
       return res.status(StatusCodes.UNAUTHORIZED).json("Password or username is incorrect")
 
+    users[0].password = undefined
     const token = generateJwt(users[0].id, users[0].username)
-    return res.status(StatusCodes.OK).json({ token: token })
+    return res.status(StatusCodes.OK).json({ token: token, user: users[0] })
   } catch (err) {
     console.error(err.message)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
