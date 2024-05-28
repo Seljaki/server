@@ -6,7 +6,8 @@ export async function getAllJobsForInvoice(req, res) {
   try {
     const invoiceId = req.params.invoiceId
 
-    const jobs = await sql`SELECT job.*, ROW_to_json(jobType) AS "jobType" FROM job JOIN jobtype ON job.jobtype_id = jobtype.id
+    const jobs = await sql`SELECT job.*, ROW_to_json(jobType) AS "jobType", (SELECT COALESCE(SUM("jobCost".amount), 0) FROM "jobCost" WHERE "jobCost".job_id = job.id) AS "totalCost"
+    FROM job JOIN jobtype ON job.jobtype_id = jobtype.id
     WHERE invoice_id = ${invoiceId}`;
 
     res.status(StatusCodes.OK).json({ jobs })
@@ -53,7 +54,8 @@ export async function addJobToInvoice(req, res) {
 }
 
 async function getById(id) {
-  const data = await sql`SELECT job.*, ROW_to_json(jobType) AS "jobType" FROM job JOIN jobtype ON job.jobtype_id = jobtype.id
+  const data = await sql`SELECT job.*, ROW_to_json(jobType) AS "jobType", (SELECT COALESCE(SUM("jobCost".amount), 0) FROM "jobCost" WHERE "jobCost".job_id = job.id) AS "totalCost"
+  FROM job JOIN jobtype ON job.jobtype_id = jobtype.id
   WHERE job.id = ${id}`
   return data[0]
 }
