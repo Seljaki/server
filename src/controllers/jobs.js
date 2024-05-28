@@ -6,7 +6,8 @@ export async function getAllJobsForInvoice(req, res) {
   try {
     const invoiceId = req.params.invoiceId
 
-    const jobs = await sql`SELECT * FROM job WHERE invoice_id = ${invoiceId}`;
+    const jobs = await sql`SELECT job.*, ROW_to_json(jobType) AS "jobType" FROM job JOIN jobtype ON job.jobtype_id = jobtype.id
+    WHERE invoice_id = ${invoiceId}`;
 
     res.status(StatusCodes.OK).json({ jobs })
   } catch (err) {
@@ -43,7 +44,7 @@ export async function addJobToInvoice(req, res) {
       ${jobtype_id}
     ) returning *`
 
-    res.status(StatusCodes.OK).json({ job: jobs[0] })
+    res.status(StatusCodes.OK).json({ job: await getById(jobs[0].id) })
   } catch (err) {
     //console.log(err)
     console.error(err.message)
@@ -52,7 +53,8 @@ export async function addJobToInvoice(req, res) {
 }
 
 async function getById(id) {
-  const data = await sql`SELECT * FROM job WHERE id = ${id}`
+  const data = await sql`SELECT job.*, ROW_to_json(jobType) AS "jobType" FROM job JOIN jobtype ON job.jobtype_id = jobtype.id
+  WHERE job.id = ${id}`
   return data[0]
 }
 
@@ -95,7 +97,7 @@ export async function updateJob(req, res) {
       jobtype_id = ${jobtype_id}
     WHERE id = ${jobId} returning *`
 
-    res.status(StatusCodes.OK).json({ job: jobs[0] })
+    res.status(StatusCodes.OK).json({ job: await getById(jobs[0].id) })
   } catch (err) {
     //console.log(err)
     console.error(err.message)

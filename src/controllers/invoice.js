@@ -3,7 +3,7 @@ import sql from "../db.js";
 import { StatusCodes } from "http-status-codes";
 
 async function getById(id) {
-  const data = await sql`SELECT invoice.*, ROW_to_json(issuer) AS issuer, ROW_TO_JSON(customer) AS CUSTOMER FROM invoice
+  const data = await sql`SELECT invoice.*, ROW_to_json(issuer) AS issuer, ROW_TO_JSON(customer) AS CUSTOMER, (SELECT COALESCE(SUM(job."totalPrice"),0) FROM job WHERE invoice_id = invoice.id) AS "totalPrice" FROM invoice
   JOIN companies AS customer ON customer_id = customer.id
   JOIN companies AS issuer ON issuer_id = issuer.id WHERE invoice.id = ${id}`;
   return data[0]
@@ -23,7 +23,7 @@ export async function getInvoiceById(req, res) {
 export async function getAllInvoices(req, res) {
   try {
     const { title } = req.query 
-    const invoices = await sql`SELECT invoice.*, ROW_to_json(issuer) AS issuer, ROW_TO_JSON(customer) AS CUSTOMER FROM invoice
+    const invoices = await sql`SELECT invoice.*, ROW_to_json(issuer) AS issuer, ROW_TO_JSON(customer) AS CUSTOMER, (SELECT COALESCE(SUM(job."totalPrice"),0) FROM job WHERE invoice_id = invoice.id) AS "totalPrice" FROM invoice
     JOIN companies AS customer ON customer_id = customer.id
     JOIN companies AS issuer ON issuer_id = issuer.id`;
     res.status(StatusCodes.OK).json({ invoices })
