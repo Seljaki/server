@@ -5,7 +5,7 @@ export async function getAllPlotsForJob(req, res) {
   try {
     const jobId = req.params.jobId
 
-    const plots = await sql`SELECT plots.* FROM plots JOIN job_has_plot ON plots.id = job_has_plot.plot_id WHERE job_has_plot.job_id = ${jobId}`;
+    const plots = await sql`SELECT plots.*, job_has_plot.date AS "dateDone" FROM plots JOIN job_has_plot ON plots.id = job_has_plot.plot_id WHERE job_has_plot.job_id = ${jobId}`;
 
     res.status(StatusCodes.OK).json({ plots })
   } catch (err) {
@@ -17,11 +17,13 @@ export async function getAllPlotsForJob(req, res) {
 export async function insertJobPlot(req, res) {
   try {
     const { jobId, plotId } = req.params
+    const { date } = req.body
 
     const jobPlots = await sql`INSERT INTO job_has_plot VALUES (
       DEFAULT,
       ${jobId},
-      ${plotId}
+      ${plotId},
+      ${date}
     ) returning *`;
 
     res.status(StatusCodes.OK).json({ jobPlot: jobPlots })
