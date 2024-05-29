@@ -4,8 +4,8 @@ import {getServiceById} from "../models/serviceModel.js";
 
 export async function listAllServices(req, res) {
     try {
-        const { title } = req.query
-        const services = await sql`SELECT * FROM service ${ title ? sql`WHERE title ILIKE ${'%'+title+'%'}` : sql``}`;
+        const {equipment_id} = req.query
+        const services = await sql`SELECT * FROM service ${equipment_id ? sql`WHERE equipment_id=${equipment_id}` : sql``}`;
         res.status(StatusCodes.OK).json({ services })
     } catch (err) {
         console.error(err.message)

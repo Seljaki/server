@@ -18,13 +18,20 @@ export async function getAllPlotsAsGeoJson(req, res) {
   try {
     const { xmin, ymin, xmax, ymax, inputSrid = 3794, outputSrid = 3794 } = req.body 
 
-    console.log(`SELECT st_asgeojson(ST_Transform(boundary, ${outputSrid})) FROM plots WHERE 
-    st_contains(st_transform(st_makeenvelope(${xmin},${ymin},${xmax},${ymax}, ${inputSrid}), 3794), boundary);`)
-
     // TODO: FIX transform, doesnt accept template literals
-    const plots = await sql`SELECT st_asgeojson(ST_Transform(boundary, 4326)) FROM plots WHERE 
-    st_contains(st_transform(st_makeenvelope(${xmin},${ymin},${xmax},${ymax}, ${inputSrid}), 3794), boundary);`;
-    res.status(StatusCodes.OK).json({ plots })
+    const plots = await sql`SELECT st_asgeojson(ST_Transform(boundary, 4326)) as plot, row_to_json(plots.*) AS "plotDetails" FROM plots 
+    ${xmin ? sql`WHERE st_contains(st_transform(st_makeenvelope(${xmin},${ymin},${xmax},${ymax}, ${inputSrid}), 3794), boundary);` : sql``} `;
+    const plotsGeoJson = {
+      type: "FeatureCollection",
+      features: [],
+    }
+
+    plots.forEach(p => {
+      //console.log(p)
+      plotsGeoJson.features.push({ type: "Feature", geometry: JSON.parse(p.plot), properties: p.plotDetails})
+    })
+
+    res.status(StatusCodes.OK).json({ plots: plotsGeoJson })
   } catch (err) {
     console.error(err.message)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
