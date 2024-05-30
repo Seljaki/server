@@ -12,6 +12,7 @@ import jobTypeRoutes from './routes/jobType.js'
 import invoicesRoutes from './routes/invoice.js'
 import jobsRoutes from './routes/jobs.js'
 import jobsCostRoutes from './routes/jobCost.js'
+import statisticsRoutes from './routes/statistics.js'
 import morgan from "morgan";
 import { requiresLogin } from "./middleware/authChecker.js";
 import migrateDatabse from "./db/migration.js";
@@ -39,6 +40,7 @@ app.use('/jobTypes', jobTypeRoutes)
 app.use('/invoices', invoicesRoutes)
 app.use('/jobs', jobsRoutes)
 app.use('/jobCosts', jobsCostRoutes)
+app.use('/statistics', statisticsRoutes)
 
 app.listen(port, async () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
