@@ -37,7 +37,11 @@ export async function getAllPlotsForInvoiceGeoJson(req, res) {
   try {
     const invoiceId = req.params.invoiceId
 
-    const plots = await sql`SELECT st_asgeojson(ST_Transform(boundary, 4326)) as plot  FROM plots JOIN job_has_plot ON plots.id = job_has_plot.plot_id WHERE job_has_plot.job_id = ${invoiceId}`;
+    const plots = await sql`SELECT st_asgeojson(ST_Transform(boundary, 4326)) as plot, job_has_plot.date AS "dateDone", ROW_TO_JSON(plots.*) AS "plotDetails", ROW_TO_JSON(job.*) AS "job"
+    FROM plots 
+    JOIN job_has_plot ON plots.id = job_has_plot.plot_id 
+    JOIN job ON job.id = job_has_plot.job_id
+    WHERE job.invoice_id = ${invoiceId}`;
 
     const plotsGeoJson = {
       type: "FeatureCollection",
@@ -46,7 +50,7 @@ export async function getAllPlotsForInvoiceGeoJson(req, res) {
 
     plots.forEach(p => {
       //console.log(p)
-      plotsGeoJson.features.push({ type: "Feature", geometry: JSON.parse(p.plot)})
+      plotsGeoJson.features.push({ type: "Feature", geometry: JSON.parse(p.plot), properties: {plot: p.plotDetails, job: p.job, dateDone: p.dateDone}})
     })
 
     res.status(StatusCodes.OK).json({ plots: plotsGeoJson })
