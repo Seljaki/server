@@ -33,22 +33,24 @@ export async function updateUser(req, res) {
   try {
     const users = await sql`SELECT * FROM users WHERE id = ${req.user.id}`;
     const user = users[0]
-    const { username, email, password } = req.body
+    let { username = user.username, email = user.username, password = user.password} = req.body
 
-    if(email)
-      user.email = email
-    if(password)
-      user.password = await hashPassword(password)
-    if(username && user.username !== username) {
+    if(email === undefined)
+      email = null
+
+    if(user.username !== username) {
       const users = await sql`SELECT * FROM users WHERE username = ${username}`;
       if(users.length !== 0)
         throw new Error("user with username already exists")
       user.username = username
     }
 
-    await sql`UPDATE users SET username = ${user.username}, password = ${user.password}, email = ${user.email} WHERE id = ${req.user.id}`
+    if(user.password !== password)
+      password = await hashPassword(password)
 
-    res.status(StatusCodes.OK).json({ user })
+    const u = await sql`UPDATE users SET username = ${username}, password = ${password}, email = ${email} WHERE id = ${req.user.id} returning *`
+
+    res.status(StatusCodes.OK).json({ user: u })
   } catch (err) {
     console.error(err.message)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
