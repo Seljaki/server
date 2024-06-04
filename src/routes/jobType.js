@@ -1,5 +1,13 @@
 import express from 'express';
-import { addJobType, deleteJobType, getAllJobTypes, getAllQuantityTypes, getJobTypeById, updateJobType } from '../controllers/jobTypes.js';
+import {
+  addJobType,
+  deleteJobType,
+  getAllJobTypes,
+  getAllJobTypesOfQuantityType,
+  getAllQuantityTypes,
+  getJobTypeById,
+  updateJobType
+} from '../controllers/jobTypes.js';
 
 const router = express.Router()
 
