@@ -7,6 +7,8 @@ router.get('/:jobTypeId', getJobTypeById)
 router.get('/', getAllJobTypes)
 router.get('/quantityTypes', getAllQuantityTypes)
 
+router.get('/jobType/:quantityType', getAllJobTypesOfQuantityType)
+
 router.post('/', addJobType)
 
 router.put('/:jobTypeId', updateJobType)
