@@ -3,8 +3,9 @@ import { StatusCodes } from "http-status-codes";
 
 export async function getAllJobTypes(req, res) {
   try {
-    const { name } = req.query 
-    const jobTypes = await sql`SELECT * FROM jobType ${ name ? sql`WHERE name ILIKE ${'%'+name+'%'}` : sql``}`;
+    const { name, quantityType } = req.query 
+    const jobTypes = await sql`SELECT * FROM jobType ${ name ? sql`WHERE name ILIKE ${'%'+name+'%'}` : sql``} 
+    ${quantityType ? sql` WHERE "quantityType" = ${quantityType}` : sql``}`;
     res.status(StatusCodes.OK).json({ jobTypes })
   } catch (err) {
     console.error(err.message)
@@ -31,17 +32,6 @@ export async function getAllQuantityTypes(req, res) {
   try {
     const quantityTypes = await sql`SELECT enum_range(NULL::QUANTITY_TYPE)`;
     res.status(StatusCodes.OK).json({ quantityTypes: quantityTypes[0].enum_range })
-  } catch (err) {
-    console.error(err.message)
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
-  }
-}
-
-export async function getAllJobTypesOfQuantityType(req, res) {
-  try {
-    const {quantityType} = req.query
-    const jobTypes = await sql`SELECT * FROM jobtype WHERE "quantityType" = ${quantityType}`;
-    res.status(StatusCodes.OK).json({ jobTypes })
   } catch (err) {
     console.error(err.message)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})

@@ -3,7 +3,6 @@ import {
   addJobType,
   deleteJobType,
   getAllJobTypes,
-  getAllJobTypesOfQuantityType,
   getAllQuantityTypes,
   getJobTypeById,
   updateJobType
@@ -14,8 +13,6 @@ const router = express.Router()
 router.get('/:jobTypeId', getJobTypeById)
 router.get('/', getAllJobTypes)
 router.get('/quantityTypes', getAllQuantityTypes)
-
-router.get('/jobType/:quantityType', getAllJobTypesOfQuantityType)
 
 router.post('/', addJobType)
 
