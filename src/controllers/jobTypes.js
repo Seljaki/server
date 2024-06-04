@@ -37,6 +37,17 @@ export async function getAllQuantityTypes(req, res) {
   }
 }
 
+export async function getAllJobTypesOfQuantityType(req, res) {
+  try {
+    const {quantityType} = req.query
+    const jobTypes = await sql`SELECT * FROM jobtype WHERE "quantityType" = ${quantityType}`;
+    res.status(StatusCodes.OK).json({ jobTypes })
+  } catch (err) {
+    console.error(err.message)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
+  }
+}
+
 export async function addJobType(req, res) {
   try {
     const { name, quantityType, price } = req.body
