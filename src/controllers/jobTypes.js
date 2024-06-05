@@ -3,9 +3,9 @@ import { StatusCodes } from "http-status-codes";
 
 export async function getAllJobTypes(req, res) {
   try {
-    const { name, quantityType } = req.query 
+    const { name, quantitytype } = req.query
     const jobTypes = await sql`SELECT * FROM jobType ${ name ? sql`WHERE name ILIKE ${'%'+name+'%'}` : sql``} 
-    ${quantityType ? sql` WHERE "quantityType" = ${quantityType}` : sql``}`;
+    ${quantitytype ? sql` WHERE  quantityType = ${quantitytype}` : sql``}`;
     res.status(StatusCodes.OK).json({ jobTypes })
   } catch (err) {
     console.error(err.message)
