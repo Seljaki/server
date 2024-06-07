@@ -22,10 +22,13 @@ export async function getInvoiceById(req, res) {
 
 export async function getAllInvoices(req, res) {
   try {
-    const { title } = req.query 
+    const { paid = undefined, sort = undefined, sortOrder = "DESC" } = req.query 
     const invoices = await sql`SELECT invoice.*, ROW_to_json(issuer) AS issuer, ROW_TO_JSON(customer) AS CUSTOMER, (SELECT COALESCE(SUM(job."totalPrice"),0) FROM job WHERE invoice_id = invoice.id) AS "totalPrice" FROM invoice
     JOIN companies AS customer ON customer_id = customer.id
-    JOIN companies AS issuer ON issuer_id = issuer.id`;
+    JOIN companies AS issuer ON issuer_id = issuer.id
+    ${paid ? sql`WHERE invoice."isPaid" = ${paid === "true"}` : sql``}
+    ORDER BY invoice.started DESC`
+    //${sort ? sql`ORDER BY ${sort} ASC` : sql``}`;
     res.status(StatusCodes.OK).json({ invoices })
   } catch (err) {
     console.error(err.message)

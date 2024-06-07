@@ -24,6 +24,16 @@ export async function companyById(req, res) {
   }
 }
 
+export async function getCompanyDefaultIssuer(req, res) {
+  try {
+    const companies = await sql`SELECT * FROM companies WHERE "defaultIssuer" = true`
+    res.status(StatusCodes.OK).json({ company: companies.length > 0 ? companies[0] : null })
+  } catch (err) {
+    console.error(err.message)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message})
+  }
+}
+
 export async function addCompany(req, res) {
   try {
     const { name, address, isTaxpayer = false, phone = null, taxNumber = null, iban = null, email = null, isDefaultIssuer = false, accessToken = crypto.randomUUID()} = req.body
