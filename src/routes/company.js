@@ -1,8 +1,9 @@
 import express from 'express';
-import { addCompany, companyById, deleteCompany, listAllCompanies, updateCompany } from '../controllers/company.js';
+import { addCompany, companyById, deleteCompany, getCompanyDefaultIssuer, listAllCompanies, updateCompany } from '../controllers/company.js';
 
 const router = express.Router()
 
+router.get('/defaultIssuer', getCompanyDefaultIssuer)
 router.get('/:companyId', companyById)
 router.get('/', listAllCompanies)
 
