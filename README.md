@@ -15,6 +15,8 @@ To run this node server you will need:
 2. Run ```npm install```
 3. Run ```npm start```
 
+Note that the default user will be created after 60s at first startup. Use credentials username: ```admin```, password: ```admin```.
+
 ## Hosting the server using docker
 **Note: Docker is required for this build type**
 1. Edit ```docker-compose.yml``` and change the environmental variables to match your environment
